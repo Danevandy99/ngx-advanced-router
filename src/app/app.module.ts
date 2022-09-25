@@ -1,8 +1,10 @@
+import { AppAdvancedRouteService } from './services/app-advanced-route.service';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AdvancedRouterModule, AdvancedRouteService } from 'ngx-advanced-router';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -10,9 +12,12 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    RouterModule.forRoot([]),
+    AdvancedRouterModule
   ],
-  providers: [],
+  providers: [
+    { provide: AdvancedRouteService, useClass: AppAdvancedRouteService },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
