@@ -1,5 +1,5 @@
 import { RouterModule, ROUTES } from '@angular/router';
-import { NgModule } from '@angular/core';
+import { NgModule, Type, ModuleWithProviders } from '@angular/core';
 import { AdvancedRouteService } from './ngx-advanced-route.service';
 
 @NgModule({
@@ -18,4 +18,13 @@ import { AdvancedRouteService } from './ngx-advanced-route.service';
     }
   ]
 })
-export class AdvancedRouterModule { }
+export class AdvancedRouterModule {
+  static withRouteService<T extends AdvancedRouteService>(routeService: Type<T>): ModuleWithProviders<AdvancedRouterModule> {
+    return {
+      ngModule: AdvancedRouterModule,
+      providers: [
+        { provide: AdvancedRouteService, useClass: routeService },
+      ]
+    }
+  }
+}

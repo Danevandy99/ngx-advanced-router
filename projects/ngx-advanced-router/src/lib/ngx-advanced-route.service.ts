@@ -9,19 +9,21 @@ import { AdvancedRoutes } from "./types/advanced-routes";
 @Directive()
 export abstract class AdvancedRouteService {
 
-  public readonly abstract routes: AdvancedRoutes<any>;
+  public readonly abstract routesConfig: AdvancedRoutes<any>;
 
-  public get routePaths(): AdvancedRoutePaths<AdvancedRoutes<this["routes"]>> {
-    return this.getRoutePaths("", this.routes);
+  protected parentPath: string = "";
+
+  public get routes(): AdvancedRoutePaths<AdvancedRoutes<this["routesConfig"]>> {
+    return this.getRoutePaths(this.parentPath, this.routesConfig);
   }
 
-  public get routesForRouter(): Routes {
-    return this.transformToRoutesForRouter(this.routes);
+  public get routesForRouter(): Routes | undefined {
+    return this.transformToRoutesForRouter(this.routesConfig);
   }
 
-  private transformToRoutesForRouter<T extends AdvancedRoutes = { [key: string]: AdvancedRoute<any> }>(routes: T): Routes {
+  private transformToRoutesForRouter<T extends AdvancedRoutes = { [key: string]: AdvancedRoute<any> }>(routes: T): Routes | undefined {
     if (!routes) {
-      return [];
+      return;
     } else {
       return Object.entries(routes).map(([key, value]) => {
         if (typeof(value.path) === 'string') {
@@ -85,7 +87,7 @@ export abstract class AdvancedRouteService {
       .split(',').filter(Boolean); // split & filter [""]
   }
 
-  protected buildPath(...parts: string[]): string {
-    return parts.join('/');
+  private buildPath(...parts: (string | null)[]): string {
+    return parts.filter(Boolean).join('/');
   }
 }
