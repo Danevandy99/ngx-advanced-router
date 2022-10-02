@@ -1,6 +1,29 @@
 {
   "name": "ngx-advanced-router",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "description": "A better way to handle Angular routes",
+  "author": {
+    "name": "Dane Vanderbilt",
+    "email": "danevandy@hotmail.com",
+    "url": "https://danevanderbilt.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Danevandy99/ngx-advanced-router.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Danevandy99/ngx-advanced-router/issues"
+  },
+  "homepage": "https://github.com/Danevandy99/ngx-advanced-router",
+  "keywords": [
+    "angular",
+    "typescript",
+    "router",
+    "route",
+    "typed",
+    "autocomplete",
+    "paths"
+  ],
   "peerDependencies": {
     "@angular/common": "^14.2.0",
     "@angular/core": "^14.2.0"
