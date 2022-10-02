@@ -6,10 +6,9 @@ import { AdvancedRouteService } from 'ngx-advanced-router';
 import { AdminCreateComponent } from '../components/admin/components/admin-create/admin-create.component';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AppAdvancedRouteService extends AdvancedRouteService {
-
   public readonly routesConfig = {
     admin: {
       path: 'admin',
@@ -26,18 +25,21 @@ export class AppAdvancedRouteService extends AdvancedRouteService {
             users: {
               path: 'users',
               component: AdminEditUsersComponent,
-            }
-          }
-        }
-      }
+            },
+          },
+        },
+      },
     },
     lazyLoaded: {
       path: 'lazy-loaded',
-      loadChildren: () => import('../modules/lazy-loaded/lazy-loaded.module').then(m => m.LazyLoadedModule)
+      loadChildren: () =>
+        import('../modules/lazy-loaded/lazy-loaded.module').then(
+          (m) => m.LazyLoadedModule
+        ),
     },
     fallBack: {
       path: '**',
       redirectTo: 'admin',
-    }
-  }
+    },
+  };
 }

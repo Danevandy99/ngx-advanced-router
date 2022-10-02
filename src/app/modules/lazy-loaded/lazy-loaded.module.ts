@@ -6,17 +6,12 @@ import { RouterModule } from '@angular/router';
 import { AdvancedRouterModule } from 'ngx-advanced-router';
 import { LazyLoadedRouteService } from './services/lazy-loaded-route.service';
 
-
-
 @NgModule({
-  declarations: [
-    ProductsComponent,
-    ProductDetailComponent
-  ],
+  declarations: [ProductsComponent, ProductDetailComponent],
   imports: [
     CommonModule,
     RouterModule,
-    AdvancedRouterModule.withRouteService(LazyLoadedRouteService)
-  ]
+    AdvancedRouterModule.withRouteService(LazyLoadedRouteService),
+  ],
 })
-export class LazyLoadedModule { }
+export class LazyLoadedModule {}

@@ -131,6 +131,17 @@
             "tsConfig": "projects/ngx-advanced-router/tsconfig.spec.json",
             "karmaConfig": "projects/ngx-advanced-router/karma.conf.js"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/app/**/*.ts",
+              "src/app/**/*.html",
+              "projects/ngx-advanced-router/**/*.ts",
+              "projects/ngx-advanced-router/**/*.html"
+            ]
+          }
         }
       }
     }

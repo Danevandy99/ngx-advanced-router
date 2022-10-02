@@ -1,3 +1,5 @@
-import { AdvancedRoute } from "./advanced-route";
+import { AdvancedRoute } from './advanced-route';
 
-export type AdvancedRouteChildType<T> = T extends AdvancedRoute<infer R> ? R : never;
+export type AdvancedRouteChildType<T> = T extends AdvancedRoute<infer R>
+  ? R
+  : never;

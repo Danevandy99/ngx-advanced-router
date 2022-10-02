@@ -16,15 +16,14 @@ import { AdminEditUsersComponent } from './components/admin/components/admin-edi
     AdminComponent,
     AdminCreateComponent,
     AdminEditComponent,
-    AdminEditUsersComponent
+    AdminEditUsersComponent,
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot([]),
     AdvancedRouterModule.withRouteService(AppAdvancedRouteService),
   ],
-  providers: [
-  ],
-  bootstrap: [AppComponent]
+  providers: [],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

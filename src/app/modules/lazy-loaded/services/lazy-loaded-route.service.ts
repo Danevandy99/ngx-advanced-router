@@ -1,15 +1,15 @@
 import { ProductDetailComponent } from './../components/product-detail/product-detail.component';
 import { ProductsComponent } from './../components/products/products.component';
 import { AppAdvancedRouteService } from './../../../services/app-advanced-route.service';
-import { AdvancedRoutes, AdvancedRouteService } from 'ngx-advanced-router';
+import { AdvancedRouteService } from 'ngx-advanced-router';
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LazyLoadedRouteService extends AdvancedRouteService {
-
-  protected override parentPath = this.appAdvancedRouteService.routes.lazyLoaded.path;
+  protected override parentPath =
+    this.appAdvancedRouteService.routes.lazyLoaded.absolutePath;
 
   public routesConfig = {
     products: {
@@ -18,15 +18,11 @@ export class LazyLoadedRouteService extends AdvancedRouteService {
     },
     productsDetail: {
       path: (productId: string) => `product-detail/${productId}`,
-      component: ProductDetailComponent
-    }
-  }
+      component: ProductDetailComponent,
+    },
+  };
 
-  constructor(
-    private appAdvancedRouteService: AppAdvancedRouteService
-  ) {
+  constructor(private appAdvancedRouteService: AppAdvancedRouteService) {
     super();
-
-    console.log(this.routesForRouter);
-   }
+  }
 }
