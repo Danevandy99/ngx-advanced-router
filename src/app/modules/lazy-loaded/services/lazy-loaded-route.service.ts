@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 })
 export class LazyLoadedRouteService extends AdvancedRouteService {
   protected override parentPath =
-    this.appAdvancedRouteService.routes.lazyLoaded.absolutePath;
+    this.appAdvancedRouteService.routes.lazyLoaded.path;
 
   public routesConfig = {
     products: {
@@ -19,6 +19,13 @@ export class LazyLoadedRouteService extends AdvancedRouteService {
     productsDetail: {
       path: (productId: string) => `product-detail/${productId}`,
       component: ProductDetailComponent,
+    },
+    nestedLazyLoaded: {
+      path: 'nested-lazy-loaded',
+      loadChildren: () =>
+        import('../modules/nested-lazy-loaded/nested-lazy-loaded.module').then(
+          (x) => x.NestedLazyLoadedModule
+        ),
     },
   };
 

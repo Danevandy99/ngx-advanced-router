@@ -4,8 +4,8 @@ import { AdvancedRoutePaths } from './advanced-route-paths';
 
 export class AdvancedRoutePath<T extends AdvancedRoute<any> = any> {
   constructor(
-    public relativePath: string,
-    public absolutePath: string,
+    public segment: string,
+    public path: string,
     public children: AdvancedRoutePaths<AdvancedRouteChildType<T>>
   ) {}
 }

@@ -1,9 +1,10 @@
 <h1>App Page</h1>
 <hr>
 <div>
-  <a [routerLink]="appAdvancedRouter.routes.admin.absolutePath">Admin Page</a>
-  <a [routerLink]="appAdvancedRouter.routes.admin.children.create.absolutePath">Admin Create Page</a>
-  <a [routerLink]="appAdvancedRouter.routes.admin.children.edit('22').absolutePath">Admin Edit (with AdminId 22) Page</a>
-  <a [routerLink]="lazyLoadedRoute.routes.products.absolutePath">Products</a>
+  <a [routerLink]="appAdvancedRouter.routes.admin.path">Admin Page</a>
+  <a [routerLink]="appAdvancedRouter.routes.admin.children.create.path">Admin Create Page</a>
+  <a [routerLink]="appAdvancedRouter.routes.admin.children.edit('22').path">Admin Edit (with AdminId 22) Page</a>
+  <a [routerLink]="lazyLoadedRoute.routes.products.path">Products</a>
+  <a [routerLink]="nestedLazyLoadedRoute.routes.attributes.path">Attributes</a>
 </div>
 <router-outlet></router-outlet>
