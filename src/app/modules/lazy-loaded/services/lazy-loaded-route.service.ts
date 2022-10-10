@@ -1,6 +1,6 @@
+import { AppAdvancedRouteService } from './../../../services/app-advanced-route.service';
 import { ProductDetailComponent } from './../components/product-detail/product-detail.component';
 import { ProductsComponent } from './../components/products/products.component';
-import { AppAdvancedRouteService } from './../../../services/app-advanced-route.service';
 import { AdvancedRouteService } from 'ngx-advanced-router';
 import { Injectable } from '@angular/core';
 

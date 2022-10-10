@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { AdvancedRoute } from './types/advanced-route';
 import { AdvancedRouteChildType } from './types/advanced-route-child-type';
 import { AdvancedRoutePath } from './types/advanced-route-path';
@@ -6,10 +7,11 @@ import { AdvancedRoutes } from './types/advanced-routes';
 
 import { Routes } from '@angular/router';
 
+@Injectable()
 export abstract class AdvancedRouteService {
   public abstract readonly routesConfig: AdvancedRoutes<any>;
 
-  protected parentPath: string = '';
+  protected parentPath: string | null = null;
 
   public get routes(): AdvancedRoutePaths<
     AdvancedRoutes<this['routesConfig']>
@@ -62,7 +64,7 @@ export abstract class AdvancedRouteService {
 
   private getRoutePaths<
     T extends AdvancedRoutes = { [key: string]: AdvancedRoute<any> }
-  >(basePath: string, routes: T): AdvancedRoutePaths<T> {
+  >(basePath: string | null, routes: T): AdvancedRoutePaths<T> {
     if (!routes) {
       return <AdvancedRoutePaths<T>>{};
     } else {

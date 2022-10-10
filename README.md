@@ -17,8 +17,7 @@
 npm install --save ngx-advanced-router
 ```
 
-2. Create a service that extends `AdvancedRouteService`. This is where you'll supply your routes.
-<br>
+2. Create a service that extends `AdvancedRouteService`. This is where you'll supply your routes.\
 While the default Angular router only allows paths to be supplied as strings, `ngx-advanced-router` allows paths to be supplied as either strings **OR** or functions.
 
 ```ts
@@ -31,18 +30,11 @@ import { AdvancedRouteService } from 'ngx-advanced-router';
 export class YourAdvancedRouteService extends AdvancedRouteService {
   public readonly routesConfig = {
     somePath: {
-      path: 'some-path',
+      path: 'some-path', // Regular string path
       component: SomeComponent,
     },
-    someLazyLoadedRoute: {
-      path: 'some-lazy-loaded-path',
-      loadChildren: () =>
-        import('../modules/some-lazy-loaded/some-lazy-loaded.module').then(
-          (m) => m.SomeLazyLoadedModule
-        ),
-    },
     someDetailPath: {
-      path: (id: string) => `some-path/${id}`,
+      path: (id: string) => `some-path/${id}`, // Function-generated string path
       component: SomeDetailComponent,
     }
     // ...
@@ -54,14 +46,7 @@ export class YourAdvancedRouteService extends AdvancedRouteService {
 }
 ```
 
-3. Import both `RouterModule` and `AdvancedRouteModule` into your `AppModule` (or `AppRoutingModule`).
-<br>
-<br>
-A few of things to note:
-<br>
-    - The `AdvancedRouteModule` will handle the registering of your routes with the `RouterModule`, so we can pass in an empty array to the `forRoot()` function.
-    - While we won't use the `RouterModule.forRoot()` function to register our routes, we still need to use the `forRoot()` function when importing to the RouterModule for the first time.
-    - Use the `withRouteService()` function (with the service you created in step #2) when importing the `AdvancedRouterModule` 
+3. Import the `AdvancedRouteModule` into your `AppModule` (or `AppRoutingModule`) using the `forRoot()` method, and pass in your advanced route service class.\
 
 ```ts
 // ...
@@ -72,8 +57,7 @@ import { YourAdvancedRouteService } from './services/your-advanced-route.service
 @NgModule({
   // ...
   imports: [
-    RouterModule.forRoot([]),
-    AdvancedRouterModule.withRouteService(YourAdvancedRouteService),
+    AdvancedRouterModule.forRoot(YourAdvancedRouteService),
   ],
 })
 export class AppModule {} // or AppRoutingModule
@@ -95,15 +79,27 @@ export class AppComponent {
 
   constructor(
     // ...
-    private yourAdvancedRouteService: YourAdvancedRouteService,
+    protected yourAdvancedRouteService: YourAdvancedRouteService,
     private router: Router,
   ) {}
 
+  // ...
+}
+```
+
+You can then use it inside a function: 
+
+```ts 
   navigateToSomePath(): void {
     const somePath = this.yourAdvancedRouteService.routes.somePath.path;
     this.router.navigate([somePath]);
   }
-}
+```
+
+Or in a routerLink in the HTML:
+
+```html
+  <a [routerLink]="yourAdvancedRouteService.routes.somePath.path">
 ```
 
 ## License

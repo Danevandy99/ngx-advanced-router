@@ -1,6 +1,6 @@
 {
   "name": "ngx-advanced-router",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A better way to handle Angular routes",
   "author": {
     "name": "Dane Vanderbilt",
@@ -24,6 +24,7 @@
     "autocomplete",
     "paths"
   ],
+  "license": "MIT",
   "peerDependencies": {
     "@angular/common": "^14.2.0",
     "@angular/core": "^14.2.0"

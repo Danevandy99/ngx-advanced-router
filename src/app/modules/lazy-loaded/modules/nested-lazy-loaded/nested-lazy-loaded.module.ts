@@ -1,4 +1,3 @@
-import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AttributesComponent } from './components/attributes/attributes.component';
@@ -9,8 +8,7 @@ import { AdvancedRouterModule } from 'ngx-advanced-router';
   declarations: [AttributesComponent],
   imports: [
     CommonModule,
-    RouterModule,
-    AdvancedRouterModule.withRouteService(NestedLazyLoadedRouteService),
+    AdvancedRouterModule.forChild(NestedLazyLoadedRouteService),
   ],
 })
 export class NestedLazyLoadedModule {}

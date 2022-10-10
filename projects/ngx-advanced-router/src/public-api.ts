@@ -2,8 +2,8 @@
  * Public API Surface of ngx-advanced-router
  */
 
-export { AdvancedRouterModule } from './lib/ngx-advanced-router.module';
-export { AdvancedRouteService } from './lib/ngx-advanced-route.service';
+export { AdvancedRouterModule } from './lib/advanced-router.module';
+export { AdvancedRouteService } from './lib/advanced-route.service';
 
 // Types
 export { AdvancedRoute } from './lib/types/advanced-route';

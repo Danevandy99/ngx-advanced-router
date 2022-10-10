@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { NestedLazyLoadedRouteService } from './modules/lazy-loaded/modules/nested-lazy-loaded/services/nested-lazy-loaded-route.service';
 import { AppAdvancedRouteService } from './services/app-advanced-route.service';
 import { Component } from '@angular/core';
@@ -14,6 +15,8 @@ export class AppComponent {
   constructor(
     protected appAdvancedRouter: AppAdvancedRouteService,
     protected lazyLoadedRoute: LazyLoadedRouteService,
-    protected nestedLazyLoadedRoute: NestedLazyLoadedRouteService
-  ) {}
+    protected nestedLazyLoadedRoute: NestedLazyLoadedRouteService,
+    private router: Router
+  ) {
+  }
 }
