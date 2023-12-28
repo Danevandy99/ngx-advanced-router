@@ -11,6 +11,7 @@ import {
   Type,
 } from '@angular/core';
 import { AdvancedRouteService } from './advanced-route.service';
+import { AdvancedRouterLinkDirective } from './advanced-router-link.directive';
 
 @NgModule({
   imports: [RouterModule],
@@ -26,6 +27,9 @@ import { AdvancedRouteService } from './advanced-route.service';
     },
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  declarations: [
+    AdvancedRouterLinkDirective
+  ],
 })
 export class AdvancedRouterModule {
   public static forRoot<T extends AdvancedRouteService>(
