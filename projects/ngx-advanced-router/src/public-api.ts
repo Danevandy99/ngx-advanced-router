@@ -1,3 +1,4 @@
+import { LinkComponent } from './lib/types/link';
 /*
  * Public API Surface of ngx-advanced-router
  */
@@ -11,3 +12,6 @@ export { AdvancedRouteChildType } from './lib/types/advanced-route-child-type';
 export { AdvancedRoutePath } from './lib/types/advanced-route-path';
 export { AdvancedRoutePaths } from './lib/types/advanced-route-paths';
 export { AdvancedRoutes } from './lib/types/advanced-routes';
+export * from './lib/types/route';
+export { Router } from './lib/types/router';
+export { LinkComponent } from './lib/types/link';

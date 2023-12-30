@@ -4,6 +4,9 @@ import { Directive, Input } from '@angular/core';
   selector: '[advancedRouterLink]',
 })
 export class AdvancedRouterLinkDirective {
+  // eslint-disable-next-line @angular-eslint/no-input-rename
+  @Input({ required: true, alias: 'advancedRouterLink' }) to!: string;
 
-  @Input({ required: true }) link!: string;
+  @Input() from?: string;
+
 }

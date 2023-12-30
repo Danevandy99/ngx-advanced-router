@@ -1,17 +1,14 @@
 {
   "extends": "../../.eslintrc.json",
-  "ignorePatterns": [
-    "!**/*"
-  ],
+  "ignorePatterns": ["!**/*"],
   "overrides": [
     {
-      "files": [
-        "*.ts"
-      ],
+      "files": ["*.ts"],
       "parserOptions": {
         "project": [
           "projects/ngx-advanced-router/tsconfig.lib.json",
-          "projects/ngx-advanced-router/tsconfig.spec.json"
+          "projects/ngx-advanced-router/tsconfig.spec.json",
+          "projects/ngx-advanced-router/tsconfig.lib.prod.json"
         ],
         "createDefaultProgram": true
       },
@@ -31,14 +28,26 @@
             "prefix": "advancedRouter",
             "style": "kebab-case"
           }
-        ]
+        ],
+        "@typescript-eslint/no-unused-vars": [
+          "warn",
+          {
+            "argsIgnorePattern": "^_{1,}$",
+            "varsIgnorePattern": "^_{1,}$",
+            "caughtErrorsIgnorePattern": "^_{1,}$",
+            "destructuredArrayIgnorePattern": "^_{1,}$"
+          }
+        ],
+        "no-unused-vars": "off",
+        "no-console": "off"
       }
     },
     {
-      "files": [
-        "*.html"
-      ],
+      "files": ["*.html"],
       "rules": {}
     }
-  ]
+  ],
+  "env": {
+    "browser": true
+  },
 }

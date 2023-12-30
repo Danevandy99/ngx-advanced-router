@@ -27,9 +27,7 @@ import { AdvancedRouterLinkDirective } from './advanced-router-link.directive';
     },
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  declarations: [
-    AdvancedRouterLinkDirective
-  ],
+  declarations: [AdvancedRouterLinkDirective],
 })
 export class AdvancedRouterModule {
   public static forRoot<T extends AdvancedRouteService>(

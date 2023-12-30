@@ -6,5 +6,6 @@
   <a [routerLink]="appAdvancedRouter.routes.admin.children.edit('22').path">Admin Edit (with AdminId 22) Page</a>
   <a [routerLink]="lazyLoadedRoute.routes.products.path">Products</a>
   <a [routerLink]="nestedLazyLoadedRoute.routes.attributes.path">Attributes</a>
+  <advanced-router-link [options]="{ to: '/admin/edit/:adminId', params: { adminId: 1 } }">Admin Page</advanced-router-link>
 </div>
 <router-outlet></router-outlet>

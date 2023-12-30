@@ -17,6 +17,5 @@ export class AppComponent {
     protected lazyLoadedRoute: LazyLoadedRouteService,
     protected nestedLazyLoadedRoute: NestedLazyLoadedRouteService,
     private router: Router
-  ) {
-  }
+  ) {}
 }
