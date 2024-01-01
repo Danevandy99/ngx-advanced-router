@@ -197,9 +197,10 @@ export interface IToSubOptions<
   TTo extends string = '',
   TResolved = ResolveRelativePath<TFrom, NoInfer<TTo>>
 > extends SearchParamOptions<TRouteTree, TFrom, TTo, TResolved>,
-    //CheckPath<TRouteTree, NoInfer<TResolved>, {}>,
     PathParamOptions<TRouteTree, TFrom, TResolved> {
-  to?: ToPathOption<TRouteTree, TFrom, TTo>;
+  to?: Exclude<NoInfer<TResolved>, RoutePaths<TRouteTree>> extends never
+    ? ToPathOption<TRouteTree, TFrom, TTo>
+    : RoutePaths<TRouteTree>;
   // The new has string or a function to update it
   hash?: true | Updater<string>;
   // State to pass to the history stack
@@ -209,12 +210,11 @@ export interface IToSubOptions<
   // // When using relative route paths, this option forces resolution from the current path, instead of the route API's path or `from` path
 }
 
-export type CheckPath<TRouteTree extends AnyRoute, TPath, TPass> = Exclude<
-  TPath,
-  RoutePaths<TRouteTree>
-> extends never
-  ? TPass
-  : CheckPathError<TRouteTree, Exclude<TPath, RoutePaths<TRouteTree>>>;
+export interface CheckPath<TRouteTree extends AnyRoute, TPath, TPass> {
+  to?: Exclude<TPath, RoutePaths<TRouteTree>> extends never
+    ? TPass
+    : RoutePaths<TRouteTree>;
+}
 
 export interface SearchParamOptions<
   TRouteTree extends AnyRoute,
@@ -803,7 +803,7 @@ export class LinkComponent2<
   @Input() mask?: ToMaskOptions<TRouteTree, TMaskFrom, TMaskTo>;
 
   // eslint-disable-next-line @angular-eslint/no-input-rename
-  @Input() to?: ToPathOption<TRouteTree, TFrom, TTo>;
+  @Input() to?: IToSubOptions<TRouteTree, TFrom, TTo>['to'];
 
   @Input() hash?: true | Updater<string>;
 
@@ -825,12 +825,7 @@ export class LinkComponent2<
 
   @Input() disabled?: boolean;
 
-  @Input() search?: SearchParamOptions<
-    TRouteTree,
-    TFrom,
-    TTo,
-    ResolveRelativePath<TFrom, NoInfer<TTo>>
-  >['search'];
+  @Input() search?: SearchParamOptions<TRouteTree, TFrom, TTo>['search'];
 }
 
 function isCtrlEvent(e: MouseEvent) {
