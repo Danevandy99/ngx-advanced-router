@@ -3,18 +3,14 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import {
-  AdvancedRouterModule,
-  RootRoute,
-  Route,
-  Router,
-} from 'ngx-advanced-router';
 import { AdminComponent } from './components/admin/admin.component';
 import { AdminCreateComponent } from './components/admin/components/admin-create/admin-create.component';
 import { AdminEditComponent } from './components/admin/components/admin-edit/admin-edit.component';
 import { AdminEditUsersComponent } from './components/admin/components/admin-edit/components/admin-edit-users/admin-edit-users.component';
 import { RouterModule, Routes } from '@angular/router';
 import { LinkComponent, LinkComponent2 } from './library/types/link';
+import { RootRoute, Route } from './library/types/route';
+import { Router } from './library/types/router';
 
 const rootRoute = new RootRoute();
 
@@ -98,7 +94,7 @@ export interface Register {
     RouterModule.forRoot(ROUTES),
     LinkComponent,
     LinkComponent2,
-    AdvancedRouterModule.forRoot(AppAdvancedRouteService),
+    //AdvancedRouterModule.forRoot(AppAdvancedRouteService),
   ],
   providers: [],
   bootstrap: [AppComponent],
