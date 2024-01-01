@@ -6,6 +6,7 @@ import { AnyRoute } from './route';
 import {
   AllParams,
   FullSearchSchema,
+  ParseRoute,
   RouteByPath,
   RouteIds,
   RoutePaths,
@@ -14,8 +15,10 @@ import { RegisteredRouter } from './router';
 import {
   Expand,
   NoInfer,
+  OptionalIfNotPresent,
   PickRequired,
   UnionToIntersection,
+  UnionToTuple,
   Updater,
 } from './utils';
 import { Router, RouterModule } from '@angular/router';
@@ -128,6 +131,20 @@ export type NavigateOptions<
   startTransition?: boolean;
 };
 
+export interface INavigateOptions<
+  TRouteTree extends AnyRoute = RegisteredRouter['routeTree'],
+  TFrom extends RoutePaths<TRouteTree> = '/',
+  TTo extends string = '',
+  TMaskFrom extends RoutePaths<TRouteTree> = TFrom,
+  TMaskTo extends string = ''
+> extends IToOptions<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo> {
+  // `replace` is a boolean that determines whether the navigation should replace the current history entry or push a new one.
+  replace?: boolean;
+  resetScroll?: boolean;
+  // If set to `true`, the link's underlying navigate() call will be wrapped in a `React.startTransition` call. Defaults to `true`.
+  startTransition?: boolean;
+}
+
 export type ToOptions<
   TRouteTree extends AnyRoute = RegisteredRouter['routeTree'],
   TFrom extends RoutePaths<TRouteTree> = '/',
@@ -137,6 +154,16 @@ export type ToOptions<
 > = ToSubOptions<TRouteTree, TFrom, TTo> & {
   mask?: ToMaskOptions<TRouteTree, TMaskFrom, TMaskTo>;
 };
+
+export interface IToOptions<
+  TRouteTree extends AnyRoute = RegisteredRouter['routeTree'],
+  TFrom extends RoutePaths<TRouteTree> = '/',
+  TTo extends string = '',
+  TMaskFrom extends RoutePaths<TRouteTree> = '/',
+  TMaskTo extends string = ''
+> extends IToSubOptions<TRouteTree, TFrom, TTo> {
+  mask?: ToMaskOptions<TRouteTree, TMaskFrom, TMaskTo>;
+}
 
 export type ToMaskOptions<
   TRouteTree extends AnyRoute = RegisteredRouter['routeTree'],
@@ -164,7 +191,32 @@ export type ToSubOptions<
   SearchParamOptions<TRouteTree, TFrom, TTo, TResolved> &
   PathParamOptions<TRouteTree, TFrom, TResolved>;
 
-export type SearchParamOptions<
+export interface IToSubOptions<
+  TRouteTree extends AnyRoute = RegisteredRouter['routeTree'],
+  TFrom extends RoutePaths<TRouteTree> = '/',
+  TTo extends string = '',
+  TResolved = ResolveRelativePath<TFrom, NoInfer<TTo>>
+> extends SearchParamOptions<TRouteTree, TFrom, TTo, TResolved>,
+    //CheckPath<TRouteTree, NoInfer<TResolved>, {}>,
+    PathParamOptions<TRouteTree, TFrom, TResolved> {
+  to?: ToPathOption<TRouteTree, TFrom, TTo>;
+  // The new has string or a function to update it
+  hash?: true | Updater<string>;
+  // State to pass to the history stack
+  //state?: true | NonNullableUpdater<HistoryState>;
+  // The source route path. This is automatically set when using route-level APIs, but for type-safe relative routing on the router itself, this is required
+  from?: TFrom;
+  // // When using relative route paths, this option forces resolution from the current path, instead of the route API's path or `from` path
+}
+
+export type CheckPath<TRouteTree extends AnyRoute, TPath, TPass> = Exclude<
+  TPath,
+  RoutePaths<TRouteTree>
+> extends never
+  ? TPass
+  : CheckPathError<TRouteTree, Exclude<TPath, RoutePaths<TRouteTree>>>;
+
+export interface SearchParamOptions<
   TRouteTree extends AnyRoute,
   TFrom,
   TTo,
@@ -184,19 +236,17 @@ export type SearchParamOptions<
   TToSearch = '' extends TTo
     ? FullSearchSchema<TRouteTree>
     : Expand<RouteByPath<TRouteTree, TResolved>['types']['fullSearchSchema']>
-> = keyof PickRequired<TToSearch> extends never
-  ? {
-      search?: true | SearchReducer<TFromSearch, TToSearch>;
-    }
-  : {
-      search: TFromSearchEnsured extends PickRequired<TToSearch>
-        ? true | SearchReducer<TFromSearch, TToSearch>
-        : SearchReducer<TFromSearch, TToSearch>;
-    };
+> {
+  search?: keyof PickRequired<TToSearch> extends never
+    ? true | SearchReducer<TFromSearch, TToSearch>
+    : TFromSearchEnsured extends PickRequired<TToSearch>
+    ? true | SearchReducer<TFromSearch, TToSearch>
+    : SearchReducer<TFromSearch, TToSearch>;
+}
 
 type SearchReducer<TFrom, TTo> = TTo | ((current: TFrom) => TTo);
 
-export type PathParamOptions<
+export interface PathParamOptions<
   TRouteTree extends AnyRoute,
   TFrom,
   TTo,
@@ -208,19 +258,15 @@ export type PathParamOptions<
   TFromParamsOptional = Omit<AllParams<TRouteTree>, keyof TFromParamsEnsured>,
   TFromParams = Expand<TFromParamsOptional & TFromParamsEnsured>,
   TToParams = Expand<RouteByPath<TRouteTree, TTo>['types']['allParams']>
-> = never extends TToParams
-  ? {
-      params?: true | ParamsReducer<Partial<TFromParams>, Partial<TFromParams>>;
-    }
-  : keyof PickRequired<TToParams> extends never
-  ? {
-      params?: true | ParamsReducer<TFromParams, TToParams>;
-    }
-  : {
-      params: TFromParamsEnsured extends PickRequired<TToParams>
-        ? true | ParamsReducer<TFromParams, TToParams>
-        : ParamsReducer<TFromParams, TToParams>;
-    };
+> {
+  params?: never extends TToParams
+    ? true | ParamsReducer<Partial<TFromParams>, Partial<TFromParams>>
+    : keyof PickRequired<TToParams> extends never
+    ? true | ParamsReducer<TFromParams, TToParams>
+    : TFromParamsEnsured extends PickRequired<TToParams>
+    ? true | ParamsReducer<TFromParams, TToParams>
+    : ParamsReducer<TFromParams, TToParams>;
+}
 
 // export type PathParamOptions<
 //   TRouteTree extends AnyRoute,
@@ -298,6 +344,20 @@ export type LinkOptions<
   disabled?: boolean;
 };
 
+export interface ILinkOptions<
+  TRouteTree extends AnyRoute = RegisteredRouter['routeTree'],
+  TFrom extends RoutePaths<TRouteTree> = '/',
+  TTo extends string = '',
+  TMaskFrom extends RoutePaths<TRouteTree> = TFrom,
+  TMaskTo extends string = ''
+> extends INavigateOptions<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo> {
+  target?: HTMLAnchorElement['target'];
+  activeOptions?: ActiveOptions;
+  preload?: false | 'intent';
+  preloadDelay?: number;
+  disabled?: boolean;
+}
+
 export type CheckRelativePath<
   TRouteTree extends AnyRoute,
   TFrom,
@@ -316,12 +376,11 @@ export type CheckRelativePath<
     : {}
   : {};
 
-export type CheckPath<TRouteTree extends AnyRoute, TPath, TPass> = Exclude<
-  TPath,
-  RoutePaths<TRouteTree>
-> extends never
-  ? TPass
-  : CheckPathError<TRouteTree, Exclude<TPath, RoutePaths<TRouteTree>>>;
+// export interface CheckPath<TRouteTree extends AnyRoute, TPath, TPass> {
+//   (): Exclude<TPath, RoutePaths<TRouteTree>> extends never
+//     ? TPass
+//     : CheckPathError<TRouteTree, Exclude<TPath, RoutePaths<TRouteTree>>>;
+// }
 
 export type CheckPathError<TRouteTree extends AnyRoute, TInvalids> = {
   to: RoutePaths<TRouteTree>;
@@ -711,6 +770,67 @@ export class LinkComponent<
     private router: Router,
     protected activatedRoute: ActivatedRoute
   ) {}
+}
+
+type RequiredUndefined<T> = {
+  [P in keyof T]-?: T[P] extends undefined
+    ? T[P]
+    : Exclude<T[P], undefined> | null;
+};
+
+@Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'advanced-router-link-2',
+  template: 'test',
+  standalone: true,
+  imports: [RouterModule, NgIf, AsyncPipe],
+})
+// eslint-disable-next-line @angular-eslint/component-class-suffix
+export class LinkComponent2<
+  TRouteTree extends AnyRoute = RegisteredRouter['routeTree'],
+  TFrom extends RoutePaths<TRouteTree> = '/',
+  TTo extends string = '',
+  TMaskFrom extends RoutePaths<TRouteTree> = '/',
+  TMaskTo extends string = ''
+> implements ILinkOptions<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo>
+{
+  @Input() replace: boolean = false;
+
+  @Input() resetScroll: boolean = false;
+
+  @Input() startTransition: boolean = false;
+
+  @Input() mask?: ToMaskOptions<TRouteTree, TMaskFrom, TMaskTo>;
+
+  // eslint-disable-next-line @angular-eslint/no-input-rename
+  @Input() to?: ToPathOption<TRouteTree, TFrom, TTo>;
+
+  @Input() hash?: true | Updater<string>;
+
+  @Input() from?: TFrom;
+
+  @Input() params: PathParamOptions<
+    TRouteTree,
+    TFrom,
+    ResolveRelativePath<TFrom, NoInfer<TTo>>
+  >['params'];
+
+  @Input() target?: string;
+
+  @Input() activeOptions?: ActiveOptions;
+
+  @Input() preload?: false | 'intent';
+
+  @Input() preloadDelay?: number;
+
+  @Input() disabled?: boolean;
+
+  @Input() search?: SearchParamOptions<
+    TRouteTree,
+    TFrom,
+    TTo,
+    ResolveRelativePath<TFrom, NoInfer<TTo>>
+  >['search'];
 }
 
 function isCtrlEvent(e: MouseEvent) {

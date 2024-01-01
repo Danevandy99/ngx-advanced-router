@@ -58,6 +58,7 @@ import { isRedirect } from './redirects';
 import { ToOptions } from './link';
 import { Component, Inject, Injectable, InjectionToken } from '@angular/core';
 import { Store } from './store/store';
+import { Register } from 'src/app/app.module';
 // import warning from 'tiny-warning'
 
 //
@@ -68,10 +69,6 @@ import { Store } from './store/store';
 //     __TSR_ROUTER_CONTEXT__?: React.Context<Router<any>>;
 //   }
 // }
-
-export interface Register {
-  // router: Router
-}
 
 export type AnyRouter = Router<AnyRoute, any>;
 
@@ -262,7 +259,7 @@ export class Router<
 
   constructor(
     //@Inject(ROUTER_CONSTRUCTOR_OPTIONS)
-    options: RouterConstructorOptions<TRouteTree, TDehydrated>,
+    options: RouterConstructorOptions<TRouteTree, TDehydrated>
   ) {
     this.update({
       defaultPreloadDelay: 50,

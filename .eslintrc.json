@@ -43,12 +43,13 @@
         "@typescript-eslint/no-unused-vars": [
           "warn",
           {
-            "argsIgnorePattern": "^_{1,}$",
-            "varsIgnorePattern": "^_{1,}$",
-            "caughtErrorsIgnorePattern": "^_{1,}$",
-            "destructuredArrayIgnorePattern": "^_{1,}$"
+            "argsIgnorePattern": "^_{1,}.*$",
+            "varsIgnorePattern": "^_{1,}.*$",
+            "caughtErrorsIgnorePattern": "^_{1,}.*$",
+            "destructuredArrayIgnorePattern": "^_{1,}.*$"
           }
-        ]
+        ],
+        "no-unused-vars": "off"
       }
     },
     {

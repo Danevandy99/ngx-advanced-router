@@ -14,7 +14,7 @@ import { AdminCreateComponent } from './components/admin/components/admin-create
 import { AdminEditComponent } from './components/admin/components/admin-edit/admin-edit.component';
 import { AdminEditUsersComponent } from './components/admin/components/admin-edit/components/admin-edit-users/admin-edit-users.component';
 import { RouterModule, Routes } from '@angular/router';
-import { LinkComponent } from './library/types/link';
+import { LinkComponent, LinkComponent2 } from './library/types/link';
 
 const rootRoute = new RootRoute();
 
@@ -81,10 +81,8 @@ const ROUTES: Routes = [
   },
 ];
 
-declare module 'ngx-advanced-router' {
-  interface Register {
-    router: typeof router;
-  }
+export interface Register {
+  router: typeof router;
 }
 
 @NgModule({
@@ -99,6 +97,7 @@ declare module 'ngx-advanced-router' {
     BrowserModule,
     RouterModule.forRoot(ROUTES),
     LinkComponent,
+    LinkComponent2,
     AdvancedRouterModule.forRoot(AppAdvancedRouteService),
   ],
   providers: [],

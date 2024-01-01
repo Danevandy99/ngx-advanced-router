@@ -97,7 +97,7 @@ export function parsePathname(pathname?: string): Segment[] {
         };
       }
 
-      if (part.charAt(0) === '$') {
+      if (part.charAt(0) === ':') {
         return {
           type: 'param',
           value: part,

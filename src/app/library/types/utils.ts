@@ -1,8 +1,7 @@
 // import { useMatch } from './matches';
 import { Routes } from '@angular/router';
-import { RouteMatch } from './matches';
 import { AnyRoute, RootRoute, Route } from './route';
-import { ParseRoute, RouteIds, RoutesById, RouteById } from './route-info';
+import { ParseRoute, RouteIds, RoutesById } from './route-info';
 import { RegisteredRouter, Router } from './router';
 
 export type NoInfer<T> = [T][T extends any ? 0 : never];
@@ -16,10 +15,10 @@ export type PickAsPartial<T, K extends keyof T> = Omit<T, K> &
 export type PickUnsafe<T, K> = K extends keyof T ? Pick<T, K> : never;
 export type PickExtra<T, K> = {
   [TKey in keyof K as string extends TKey
-  ? never
-  : TKey extends keyof T
-  ? never
-  : TKey]: K[TKey];
+    ? never
+    : TKey extends keyof T
+    ? never
+    : TKey]: K[TKey];
 };
 
 export type PickRequired<T> = {
@@ -28,8 +27,8 @@ export type PickRequired<T> = {
 
 export type Expand<T> = T extends object
   ? T extends infer O
-  ? { [K in keyof O]: O[K] }
-  : never
+    ? { [K in keyof O]: O[K] }
+    : never
   : T;
 
 export type UnionToIntersection<U> = (
@@ -42,8 +41,8 @@ export type Assign<Left, Right> = Omit<Left, keyof Right> & Right;
 
 export type AssignAll<T extends any[]> = T extends [infer Left, ...infer Right]
   ? Right extends any[]
-  ? Assign<Left, AssignAll<Right>>
-  : Left
+    ? Assign<Left, AssignAll<Right>>
+    : Left
   : {};
 
 export type Values<O> = O[ValueKeys<O>];
@@ -56,11 +55,19 @@ export type DeepAwaited<T> = T extends Promise<infer A>
   : T;
 
 export type PathParamMask<TRoutePath extends string> =
-  TRoutePath extends `${infer L}/:${infer C}/${infer R}`
-  ? PathParamMask<`${L}/${string}/${R}`>
-  : TRoutePath extends `${infer L}/:${infer C}`
-  ? PathParamMask<`${L}/${string}`>
-  : TRoutePath;
+  TRoutePath extends `${infer L}/:${infer _C}/${infer R}`
+    ? PathParamMask<`${L}/${string}/${R}`>
+    : TRoutePath extends `${infer L}/:${infer _C}`
+    ? PathParamMask<`${L}/${string}`>
+    : TRoutePath;
+
+export type OptionalIfNotPresent<T> = {
+  [K in keyof T]-?: T extends Record<K, any>
+    ? OptionalIfNotPresent<T[K]> // Recursive call for nested types
+    : K extends keyof T
+    ? T[K]
+    : T[K] | undefined;
+};
 
 // eslint-disable-next-line no-undef
 export type Timeout = ReturnType<typeof setTimeout>;
@@ -251,13 +258,13 @@ export function shallow<T>(objA: T, objB: T) {
 
 export type StrictOrFrom<TFrom> =
   | {
-    from: TFrom;
-    strict?: true;
-  }
+      from: TFrom;
+      strict?: true;
+    }
   | {
-    from?: never;
-    strict: false;
-  };
+      from?: never;
+      strict: false;
+    };
 
 export type RouteFromIdOrRoute<
   T,
@@ -270,11 +277,9 @@ export type RouteFromIdOrRoute<
   ? RouteIds<TRouteTree>
   : never;
 
-
 export type PickAndFlatten<T, K extends keyof T> = UnionToIntersection<T[K]>;
 
 export type RemoveIntersection<T> = T extends infer U & infer V ? U | V : T;
-
 
 // export function useRouteContext<
 //   TRouteTree extends AnyRoute = RegisteredRouter['routeTree'],
@@ -306,17 +311,27 @@ export function escapeJSON(jsonString: string) {
 export function convertToAdvancedRoutes(routes: Routes): Router {
   const rootRoute = new RootRoute();
 
-  const routeTree = rootRoute.addChildren(convertChildrenToAdvancedRoutes(routes, rootRoute));
+  const routeTree = rootRoute.addChildren(
+    convertChildrenToAdvancedRoutes(routes, rootRoute)
+  );
 
   return new Router({ routeTree });
 }
 
-function convertChildrenToAdvancedRoutes(routes: Routes, parentRoute: AnyRoute): AnyRoute[] {
+function convertChildrenToAdvancedRoutes(
+  routes: Routes,
+  parentRoute: AnyRoute
+): AnyRoute[] {
   return routes.map((angularRoute) => {
-    const route = new Route({ path: angularRoute.path!, getParentRoute: () => parentRoute });
+    const route = new Route({
+      path: angularRoute.path!,
+      getParentRoute: () => parentRoute,
+    });
 
     if (angularRoute.children) {
-      return route.addChildren(convertChildrenToAdvancedRoutes(angularRoute.children, route))
+      return route.addChildren(
+        convertChildrenToAdvancedRoutes(angularRoute.children, route)
+      );
     }
 
     return route;
